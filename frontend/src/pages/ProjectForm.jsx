@@ -463,25 +463,73 @@ export default function ProjectForm() {
                 Location
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              {/* Manual Coordinate Input */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="latitude">Latitude</Label>
+                  <Input
+                    id="latitude"
+                    type="number"
+                    step="any"
+                    value={formData.coordinates?.lat || ""}
+                    onChange={(e) => {
+                      const lat = e.target.value ? parseFloat(e.target.value) : null;
+                      setFormData(prev => ({
+                        ...prev,
+                        coordinates: { ...prev.coordinates, lat }
+                      }));
+                    }}
+                    placeholder="e.g., 13.6218"
+                    className="mt-1.5"
+                    data-testid="latitude-input"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="longitude">Longitude</Label>
+                  <Input
+                    id="longitude"
+                    type="number"
+                    step="any"
+                    value={formData.coordinates?.lng || ""}
+                    onChange={(e) => {
+                      const lng = e.target.value ? parseFloat(e.target.value) : null;
+                      setFormData(prev => ({
+                        ...prev,
+                        coordinates: { ...prev.coordinates, lng }
+                      }));
+                    }}
+                    placeholder="e.g., 123.1948"
+                    className="mt-1.5"
+                    data-testid="longitude-input"
+                  />
+                </div>
+              </div>
+
+              {/* Status indicator and Pick on Map button */}
               {formData.coordinates?.lat && formData.coordinates?.lng ? (
                 <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-200">
-                  <div>
-                    <p className="font-medium text-green-800">Location Set</p>
-                    <p className="text-sm text-green-600">
-                      {formData.coordinates.lat.toFixed(6)}, {formData.coordinates.lng.toFixed(6)}
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-5 h-5 text-green-600" />
+                    <div>
+                      <p className="font-medium text-green-800">Location Set</p>
+                      <p className="text-sm text-green-600">
+                        {formData.coordinates.lat.toFixed(6)}, {formData.coordinates.lng.toFixed(6)}
+                      </p>
+                    </div>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowLocationPicker(true)}
-                    className="border-green-300 text-green-700 hover:bg-green-100"
-                    data-testid="change-location-btn"
-                  >
-                    Change
-                  </Button>
+                  {GOOGLE_MAPS_API_KEY && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowLocationPicker(true)}
+                      className="border-green-300 text-green-700 hover:bg-green-100"
+                      data-testid="change-location-btn"
+                    >
+                      Pick on Map
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-200">
@@ -490,7 +538,7 @@ export default function ProjectForm() {
                     <div>
                       <p className="font-medium text-amber-800">No Location Set</p>
                       <p className="text-sm text-amber-600">
-                        Upload a geotagged photo or pick manually
+                        Enter coordinates above or pick on map
                       </p>
                     </div>
                   </div>
@@ -509,6 +557,11 @@ export default function ProjectForm() {
                   )}
                 </div>
               )}
+
+              {/* Helper text */}
+              <p className="text-xs text-gray-500">
+                Tip: Upload a geotagged photo to auto-extract coordinates, or enter them manually above.
+              </p>
             </CardContent>
           </Card>
 
