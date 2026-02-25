@@ -1,0 +1,158 @@
+{
+  "identity": {
+    "name": "Agri-Monitor R5",
+    "description": "A field-ready project monitoring dashboard for the Department of Agriculture Region 5, focusing on geospatial data and visual verification.",
+    "archetype": "The Scientific Harvest",
+    "tone": "Professional, Earthy, Precise, Growth-oriented"
+  },
+  "color_palette": {
+    "name": "Bicol Verdant",
+    "description": "A palette inspired by the lush landscapes of Bicol and the official agricultural tones, avoiding generic 'tech blue'.",
+    "primary": {
+      "DEFAULT": "#1E5631",
+      "foreground": "#FFFFFF",
+      "hover": "#144224",
+      "description": "Deep Forest Green - Represents stability, growth, and the institution."
+    },
+    "secondary": {
+      "DEFAULT": "#E4C068",
+      "foreground": "#282828",
+      "hover": "#D4B058",
+      "description": "Rice Stalk Gold - Represents harvest, value, and success."
+    },
+    "accent": {
+      "DEFAULT": "#D2691E",
+      "foreground": "#FFFFFF",
+      "description": "Fertile Clay - Used for call-to-actions and alerts. Earthy orange-brown."
+    },
+    "background": {
+      "DEFAULT": "#F8FAF8",
+      "paper": "#FFFFFF",
+      "subtle": "#F0FDF4",
+      "description": "Volcanic Ash / Pale Sage - Very light, almost white greens/greys for reduced eye strain in sunlight."
+    },
+    "text": {
+      "primary": "#1A1A1A",
+      "secondary": "#52665A",
+      "muted": "#8FA396"
+    },
+    "status": {
+      "proposed": "#64748B",
+      "ongoing": "#D97706",
+      "completed": "#15803D",
+      "delayed": "#DC2626"
+    }
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Manrope, sans-serif",
+      "body": "Public Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-4xl font-bold tracking-tight text-primary",
+      "h2": "text-3xl font-semibold tracking-tight text-primary-dark",
+      "h3": "text-2xl font-semibold text-gray-900",
+      "body": "text-base leading-relaxed text-gray-700",
+      "small": "text-sm text-gray-500",
+      "label": "text-xs font-bold uppercase tracking-wider text-gray-500"
+    }
+  },
+  "layout_strategy": {
+    "grid_system": "Bento Grid (Mode B: High Density)",
+    "container_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "spacing": {
+      "section_gap": "gap-8",
+      "card_padding": "p-6"
+    },
+    "mobile_first": {
+      "navigation": "Bottom Navigation Bar (Fixed)",
+      "actions": "Floating Action Button (FAB) for 'Add Project'",
+      "details": "Bottom Sheet (Drawer) instead of Modals"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-white hover:bg-primary/90 rounded-full px-6 py-2.5 font-medium transition-all shadow-md hover:shadow-lg active:scale-95",
+      "secondary": "bg-white text-primary border border-primary/20 hover:bg-primary/5 rounded-full px-6 py-2.5 font-medium transition-colors",
+      "ghost": "text-gray-600 hover:text-primary hover:bg-primary/5 rounded-lg px-4 py-2 transition-colors",
+      "fab": "fixed bottom-20 right-4 h-14 w-14 rounded-full bg-accent text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform z-50"
+    },
+    "cards": {
+      "project": "bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow group relative",
+      "stat": "bg-white/80 backdrop-blur-sm rounded-xl p-5 border border-primary/10 shadow-sm flex flex-col justify-between h-full"
+    },
+    "inputs": {
+      "default": "rounded-lg border-gray-200 focus:border-primary focus:ring-primary/20 bg-gray-50/50 focus:bg-white transition-all",
+      "search": "pl-10 rounded-full border-none bg-white shadow-sm ring-1 ring-gray-200 focus:ring-2 focus:ring-primary/20"
+    },
+    "map": {
+      "container": "w-full h-[calc(100vh-64px)] rounded-none sm:rounded-2xl overflow-hidden shadow-inner border border-gray-200 relative",
+      "marker_style": "Custom SVG Pin with Status Color Ring",
+      "popup": "bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-gray-100 p-0 w-64"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "bg-white/80 backdrop-blur-md border border-white/20 shadow-lg",
+    "shadows": {
+      "card": "0 2px 8px -2px rgba(30, 86, 49, 0.05), 0 4px 16px -4px rgba(30, 86, 49, 0.02)",
+      "floating": "0 12px 32px -8px rgba(30, 86, 49, 0.15)"
+    },
+    "gradients": {
+      "hero": "bg-gradient-to-b from-primary/5 to-transparent",
+      "overlay": "bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_bg": "https://images.pexels.com/photos/11936032/pexels-photo-11936032.jpeg",
+      "logo_placeholder": "https://images.pexels.com/photos/35642595/pexels-photo-35642595.jpeg",
+      "login_cover": "https://images.unsplash.com/photo-1709456808420-061f2b8488d7",
+      "empty_state": "https://images.unsplash.com/photo-1654662063473-966e2e7d76b0"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "preferred": [
+        "Sprout",
+        "MapPin",
+        "LayoutDashboard",
+        "Camera",
+        "FileText",
+        "BarChart3",
+        "Users"
+      ]
+    }
+  },
+  "feature_specs": {
+    "map_integration": {
+      "provider": "Google Maps Javascript API",
+      "style": "Clean, Desaturated features to make pins pop",
+      "controls": "Custom floating controls (Zoom, User Location, Layer Toggle)"
+    },
+    "exif_extraction": {
+      "library": "exif-js",
+      "fields": ["GPSLatitude", "GPSLongitude", "DateTimeOriginal"],
+      "fallback": "Manual 'Pick on Map' UI"
+    }
+  },
+  "universal_guidelines": [
+    "Design for Sunlight: High contrast text and distinct borders are mandatory for field usage.",
+    "Touch Targets: All interactive elements must be at least 44x44px.",
+    "Data Density: Use 'Bento' grids for desktop, 'Stack' layouts for mobile.",
+    "No 'Generic Blue': Stick strictly to the 'Bicol Verdant' palette.",
+    "Animation: Use 'framer-motion' for smooth page transitions and list staggering.",
+    "Feedback: Immediate visual feedback on all upload/save actions (Toasts via 'sonner').",
+    "Empty States: Never leave a blank page. Use an agricultural illustration + clear CTA.",
+    "Map Hierarchy: Map pins must be z-indexed above map labels. Active pin z-index: 50."
+  ],
+  "instructions_to_main_agent": [
+    "1. Setup Shadcn UI with the custom colors defined in 'color_palette'.",
+    "2. Install 'lucide-react', 'recharts', 'framer-motion', 'sonner', '@react-google-maps/api', 'exif-js'.",
+    "3. Create a layout wrapper that handles the responsive navigation (Sidebar on Desktop, Bottom Bar on Mobile).",
+    "4. Implement the 'Project Gallery' using a masonry or responsive grid layout.",
+    "5. Ensure the Map View takes up the full available height minus the header/nav.",
+    "6. Use the provided image URLs for the landing page and empty states.",
+    "7. Mock the Google Maps API key if not provided in environment variables, or provide a clear setup instruction in README.",
+    "8. For the 'Add Project' flow, implement the image upload first, then extract EXIF, then show the form with pre-filled coordinates."
+  ]
+}
