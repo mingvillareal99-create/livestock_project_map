@@ -3,7 +3,7 @@ import { LayoutDashboard, Images, Map, Plus, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
-const DA_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/5/50/Department_of_Agriculture_%28DA%29.svg";
+const DA_LOGO_URL = "https://www.da.gov.ph/wp-content/uploads/2019/06/da-logo-2x.png";
 
 const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
