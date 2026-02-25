@@ -3,7 +3,15 @@ import { LayoutDashboard, Images, Map, Plus, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
-const DA_LOGO_URL = "https://www.da.gov.ph/wp-content/uploads/2019/06/da-logo-2x.png";
+// DA Logo component with fallback
+const DALogo = ({ className }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="48" fill="#1E5631" stroke="#E4C068" strokeWidth="4"/>
+    <path d="M30 65 L50 30 L70 65 L60 65 L50 45 L40 65 Z" fill="#E4C068"/>
+    <path d="M35 70 L50 50 L65 70" stroke="#E4C068" strokeWidth="3" fill="none"/>
+    <circle cx="50" cy="38" r="6" fill="#E4C068"/>
+  </svg>
+);
 
 const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -22,11 +30,7 @@ export default function Layout() {
         {/* Logo */}
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <img 
-              src={DA_LOGO_URL} 
-              alt="DA Logo" 
-              className="w-12 h-12 object-contain"
-            />
+            <DALogo className="w-12 h-12" />
             <div>
               <h1 className="font-bold text-[#1E5631] text-sm leading-tight">Department of</h1>
               <h1 className="font-bold text-[#1E5631] text-sm leading-tight">Agriculture</h1>
@@ -76,11 +80,7 @@ export default function Layout() {
       <header className="md:hidden fixed top-0 left-0 right-0 z-50 header-glass">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <img 
-              src={DA_LOGO_URL} 
-              alt="DA Logo" 
-              className="w-10 h-10 object-contain"
-            />
+            <DALogo className="w-10 h-10" />
             <div>
               <h1 className="font-bold text-[#1E5631] text-sm">DA Region 5</h1>
               <p className="text-xs text-gray-500">Project Monitor</p>
