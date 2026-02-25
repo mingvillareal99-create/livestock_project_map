@@ -165,14 +165,14 @@
 
 /* Button primary DA */
 .btn-da-primary {
-  @apply bg-[#1E5631] text-white hover:bg-[#144224];
+  @apply bg-[#357A37] text-white hover:bg-[#2A6B2E];
   @apply rounded-full px-6 py-2.5 font-medium;
   @apply transition-all shadow-md hover:shadow-lg active:scale-95;
 }
 
 .btn-da-secondary {
-  @apply bg-white text-[#1E5631] border border-[#1E5631]/20;
-  @apply hover:bg-[#1E5631]/5 rounded-full px-6 py-2.5 font-medium;
+  @apply bg-white text-[#357A37] border border-[#357A37]/20;
+  @apply hover:bg-[#357A37]/5 rounded-full px-6 py-2.5 font-medium;
   @apply transition-colors;
 }
 
@@ -182,7 +182,7 @@
 }
 
 .badge-ongoing {
-  @apply bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-semibold;
+  @apply bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-semibold;
 }
 
 .badge-completed {
