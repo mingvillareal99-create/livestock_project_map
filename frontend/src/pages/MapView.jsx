@@ -479,19 +479,31 @@ export default function MapView() {
   return (
     <APIProvider 
       apiKey={GOOGLE_MAPS_API_KEY}
-      onError={() => setMapError(true)}
+      onError={(e) => {
+        console.error("Google Maps API Error:", e);
+        setMapError(true);
+      }}
     >
-      <GoogleMapWrapper
-        projects={projects}
-        selectedProject={selectedProject}
-        onMarkerClick={handleMarkerClick}
-        onInfoWindowClose={handleInfoWindowClose}
-        projectsWithoutCoords={projectsWithoutCoords}
-        showNoCoordsList={showNoCoordsList}
-        setShowNoCoordsList={setShowNoCoordsList}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-      />
+      {mapError ? (
+        <ProjectListView 
+          projects={projects} 
+          projectsWithoutCoords={projectsWithoutCoords}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+        />
+      ) : (
+        <GoogleMapWrapper
+          projects={projects}
+          selectedProject={selectedProject}
+          onMarkerClick={handleMarkerClick}
+          onInfoWindowClose={handleInfoWindowClose}
+          projectsWithoutCoords={projectsWithoutCoords}
+          showNoCoordsList={showNoCoordsList}
+          setShowNoCoordsList={setShowNoCoordsList}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+        />
+      )}
     </APIProvider>
   );
 }
