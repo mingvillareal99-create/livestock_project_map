@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { 
   MapPin, 
   X, 
   AlertTriangle,
   ExternalLink,
   Filter,
-  ChevronDown
+  ChevronDown,
+  Navigation
 } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
+import { Card, CardContent } from "../components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,11 +32,25 @@ const STATUS_COLORS = {
   Completed: "#15803D"
 };
 
+// Dynamic import for Google Maps to handle errors gracefully
+let APIProvider, Map, AdvancedMarker, InfoWindow, useMap;
+
+try {
+  const mapsModule = require("@vis.gl/react-google-maps");
+  APIProvider = mapsModule.APIProvider;
+  Map = mapsModule.Map;
+  AdvancedMarker = mapsModule.AdvancedMarker;
+  InfoWindow = mapsModule.InfoWindow;
+  useMap = mapsModule.useMap;
+} catch (e) {
+  console.error("Failed to load Google Maps module:", e);
+}
+
 function MapContent({ projects, selectedProject, onMarkerClick, onInfoWindowClose }) {
-  const map = useMap();
+  const map = useMap ? useMap() : null;
 
   useEffect(() => {
-    if (map && projects.length > 0) {
+    if (map && projects.length > 0 && window.google) {
       // Fit bounds to show all markers
       const projectsWithCoords = projects.filter(p => p.coordinates?.lat && p.coordinates?.lng);
       if (projectsWithCoords.length > 0) {
@@ -48,6 +62,8 @@ function MapContent({ projects, selectedProject, onMarkerClick, onInfoWindowClos
       }
     }
   }, [map, projects]);
+
+  if (!AdvancedMarker || !InfoWindow) return null;
 
   return (
     <>
@@ -131,6 +147,138 @@ function InfoCard({ project }) {
   );
 }
 
+// Fallback List View when Maps API is unavailable
+function ProjectListView({ projects, statusFilter, setStatusFilter }) {
+  const navigate = useNavigate();
+  
+  const getStatusBadge = (status) => {
+    const badges = {
+      Proposed: "badge-proposed",
+      Ongoing: "badge-ongoing",
+      Completed: "badge-completed"
+    };
+    return badges[status] || badges.Proposed;
+  };
+
+  return (
+    <div className="p-4 md:p-8" data-testid="map-list-view">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#1E5631] mb-1">
+            Project Locations
+          </h1>
+          <p className="text-gray-500">
+            View projects with GPS coordinates
+          </p>
+        </div>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="outline" 
+              className="border-gray-200"
+              data-testid="list-filter-btn"
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              {statusFilter}
+              <ChevronDown className="w-4 h-4 ml-2" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {["All", "Proposed", "Ongoing", "Completed"].map((status) => (
+              <DropdownMenuItem
+                key={status}
+                onClick={() => setStatusFilter(status)}
+              >
+                {status}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* API Key Warning */}
+      <Card className="mb-6 bg-amber-50 border-amber-200">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-amber-800 mb-1">Google Maps API Configuration Required</h3>
+              <p className="text-sm text-amber-700">
+                The Google Maps API key needs to be configured with HTTP referrer restrictions for this domain. 
+                Below is a list view of all projects with coordinates.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Projects with coordinates */}
+      <div className="space-y-3">
+        {projects.filter(p => p.coordinates?.lat).map((project) => (
+          <Card 
+            key={project.id}
+            className="project-card cursor-pointer"
+            onClick={() => navigate(`/project/${project.id}`)}
+            data-testid={`map-list-project-${project.id}`}
+          >
+            <CardContent className="p-4">
+              <div className="flex items-center gap-4">
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: STATUS_COLORS[project.status] + "20" }}
+                >
+                  <MapPin 
+                    className="w-6 h-6" 
+                    style={{ color: STATUS_COLORS[project.status] }} 
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 truncate">
+                    {project.project_name}
+                  </h3>
+                  <p className="text-sm text-gray-500 truncate">
+                    {project.beneficiary_name}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className={getStatusBadge(project.status)}>
+                      {project.status}
+                    </span>
+                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <Navigation className="w-3 h-3" />
+                      {project.coordinates.lat.toFixed(4)}, {project.coordinates.lng.toFixed(4)}
+                    </span>
+                  </div>
+                </div>
+                <a
+                  href={`https://www.google.com/maps?q=${project.coordinates.lat},${project.coordinates.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="p-2 bg-[#1E5631] text-white rounded-lg hover:bg-[#144224] transition-colors"
+                  data-testid={`open-in-gmaps-${project.id}`}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        {projects.filter(p => p.coordinates?.lat).length === 0 && (
+          <Card className="p-8 text-center">
+            <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <h3 className="font-semibold text-gray-700 mb-2">No Projects with Coordinates</h3>
+            <p className="text-gray-500">
+              Projects with GPS coordinates will appear here
+            </p>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function MapView() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -139,6 +287,7 @@ export default function MapView() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [projectsWithoutCoords, setProjectsWithoutCoords] = useState([]);
   const [showNoCoordsList, setShowNoCoordsList] = useState(false);
+  const [mapError, setMapError] = useState(false);
 
   useEffect(() => {
     fetchProjects();
@@ -172,26 +321,21 @@ export default function MapView() {
     setSelectedProject(null);
   }, []);
 
-  if (!GOOGLE_MAPS_API_KEY) {
+  // Check if Google Maps components are available
+  if (!GOOGLE_MAPS_API_KEY || !APIProvider || !Map || mapError) {
     return (
-      <div className="p-4 md:p-8" data-testid="map-no-key">
-        <Card className="p-8 text-center">
-          <AlertTriangle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
-            Google Maps API Key Required
-          </h2>
-          <p className="text-gray-500 mb-4">
-            Please configure REACT_APP_GOOGLE_MAPS_API_KEY in your environment variables.
-          </p>
-        </Card>
-      </div>
+      <ProjectListView 
+        projects={projects.length > 0 ? projects : []} 
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+      />
     );
   }
 
   return (
     <div className="relative h-full" data-testid="map-view">
       {/* Floating Controls */}
-      <div className="absolute top-4 left-4 right-4 z-10 flex items-center gap-2">
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-center gap-2 flex-wrap">
         <h1 className="text-lg font-bold text-[#1E5631] bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
           Map View
         </h1>
@@ -276,7 +420,10 @@ export default function MapView() {
           </div>
         </div>
       ) : (
-        <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
+        <APIProvider 
+          apiKey={GOOGLE_MAPS_API_KEY}
+          onLoad={() => console.log("Maps API loaded")}
+        >
           <Map
             className="map-container"
             defaultCenter={BICOL_CENTER}
@@ -288,6 +435,7 @@ export default function MapView() {
             mapTypeControl={false}
             streetViewControl={false}
             fullscreenControl={true}
+            onError={() => setMapError(true)}
           >
             <MapContent
               projects={projects}
