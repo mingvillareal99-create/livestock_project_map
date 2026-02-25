@@ -44,6 +44,18 @@ const BICOL_CENTER = { lat: 13.4213, lng: 123.4139 };
 
 const STATUS_OPTIONS = ["Proposed", "Ongoing", "Completed"];
 
+const PROJECT_TYPE_OPTIONS = [
+  "Swine Modules Package 2B with housing",
+  "Swine Modules Package 3B with housing",
+  "Chicken Modules Package 1 (Free Range)",
+  "Duck Modules Package 1",
+  "Beef Cattle Package 1 (Fattening)",
+  "Beef Cattle Package 2 (Breeder) Upgraded with Housing",
+  "Goat Package 1 (Meat/Dairy/Dual Type)",
+  "Rabbit Package",
+  "Stingless Bees"
+];
+
 function LocationPicker({ coordinates, onLocationSelect, onClose }) {
   const [markerPosition, setMarkerPosition] = useState(
     coordinates?.lat && coordinates?.lng
