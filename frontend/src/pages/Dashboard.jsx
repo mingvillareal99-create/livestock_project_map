@@ -99,7 +99,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#1E5631] mb-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#357A37] mb-1">
             Project Dashboard
           </h1>
           <p className="text-gray-500">
@@ -111,7 +111,7 @@ export default function Dashboard() {
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="outline" 
-                className="border-[#1E5631]/20 text-[#1E5631]"
+                className="border-[#357A37]/20 text-[#357A37]"
                 data-testid="export-dropdown-btn"
               >
                 <Download className="w-4 h-4 mr-2" />
@@ -141,8 +141,8 @@ export default function Dashboard() {
         <Card className="stat-card" data-testid="stat-total">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-3">
-              <div className="p-2 bg-[#1E5631]/10 rounded-lg">
-                <FolderOpen className="w-5 h-5 text-[#1E5631]" />
+              <div className="p-2 bg-[#357A37]/10 rounded-lg">
+                <FolderOpen className="w-5 h-5 text-[#357A37]" />
               </div>
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Total
@@ -209,15 +209,15 @@ export default function Dashboard() {
 
       {/* Location Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <Card className="stat-card bg-gradient-to-br from-[#1E5631]/5 to-transparent">
+        <Card className="stat-card bg-gradient-to-br from-[#357A37]/5 to-transparent">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-[#1E5631] rounded-xl">
+              <div className="p-3 bg-[#357A37] rounded-xl">
                 <MapPin className="w-6 h-6 text-white" />
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-1">With GPS Coordinates</p>
-                <p className="text-2xl font-bold text-[#1E5631]">
+                <p className="text-2xl font-bold text-[#357A37]">
                   {stats?.with_coordinates || 0}
                   <span className="text-sm font-normal text-gray-500 ml-2">
                     / {stats?.total_projects || 0}
@@ -259,7 +259,7 @@ export default function Dashboard() {
           <Button
             variant="ghost"
             onClick={() => navigate('/gallery')}
-            className="text-[#1E5631] hover:text-[#1E5631] hover:bg-[#1E5631]/5"
+            className="text-[#357A37] hover:text-[#357A37] hover:bg-[#357A37]/5"
             data-testid="view-all-btn"
           >
             View All
@@ -279,7 +279,7 @@ export default function Dashboard() {
               </p>
               <Button
                 onClick={() => navigate('/project/new')}
-                className="bg-[#1E5631] hover:bg-[#144224]"
+                className="bg-[#357A37] hover:bg-[#2A6B2E]"
                 data-testid="add-first-project-btn"
               >
                 Add Project

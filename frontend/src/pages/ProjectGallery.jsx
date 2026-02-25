@@ -75,7 +75,7 @@ export default function ProjectGallery() {
     <div className="p-4 md:p-8" data-testid="project-gallery">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#1E5631] mb-1">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#357A37] mb-1">
           Project Gallery
         </h1>
         <p className="text-gray-500">
@@ -179,7 +179,7 @@ export default function ProjectGallery() {
             {!search && (
               <Button
                 onClick={() => navigate('/project/new')}
-                className="bg-[#1E5631] hover:bg-[#144224]"
+                className="bg-[#357A37] hover:bg-[#2A6B2E]"
                 data-testid="add-project-empty-btn"
               >
                 Add Project

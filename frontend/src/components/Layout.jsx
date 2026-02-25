@@ -28,8 +28,8 @@ export default function Layout() {
               className="w-12 h-12 object-contain rounded-lg"
             />
             <div>
-              <h1 className="font-bold text-[#1E5631] text-sm leading-tight">Department of</h1>
-              <h1 className="font-bold text-[#1E5631] text-sm leading-tight">Agriculture</h1>
+              <h1 className="font-bold text-[#357A37] text-sm leading-tight">Department of</h1>
+              <h1 className="font-bold text-[#357A37] text-sm leading-tight">Agriculture</h1>
               <p className="text-xs text-gray-500">Region 5</p>
             </div>
           </div>
@@ -45,8 +45,8 @@ export default function Layout() {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                       isActive
-                        ? "bg-[#1E5631] text-white shadow-md"
-                        : "text-gray-600 hover:bg-[#1E5631]/5 hover:text-[#1E5631]"
+                        ? "bg-[#357A37] text-white shadow-md"
+                        : "text-gray-600 hover:bg-[#357A37]/5 hover:text-[#357A37]"
                     }`
                   }
                   end={item.path === "/"}
@@ -63,7 +63,7 @@ export default function Layout() {
         <div className="p-4 border-t border-gray-100">
           <Button
             onClick={() => navigate("/project/new")}
-            className="w-full bg-[#D2691E] hover:bg-[#B8591A] text-white rounded-xl py-3 font-medium shadow-md"
+            className="w-full bg-[#EF8E1E] hover:bg-[#B8591A] text-white rounded-xl py-3 font-medium shadow-md"
             data-testid="add-project-sidebar-btn"
           >
             <Plus className="w-5 h-5 mr-2" />
@@ -82,7 +82,7 @@ export default function Layout() {
               className="w-10 h-10 object-contain rounded-lg"
             />
             <div>
-              <h1 className="font-bold text-[#1E5631] text-sm">DA Region 5</h1>
+              <h1 className="font-bold text-[#357A37] text-sm">DA Region 5</h1>
               <p className="text-xs text-gray-500">Project Monitor</p>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function Layout() {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-4 py-3 rounded-xl mb-2 ${
                       isActive
-                        ? "bg-[#1E5631] text-white"
+                        ? "bg-[#357A37] text-white"
                         : "text-gray-600 hover:bg-gray-100"
                     }`
                   }

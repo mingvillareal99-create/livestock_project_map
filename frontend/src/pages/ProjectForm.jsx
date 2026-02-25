@@ -89,7 +89,7 @@ function LocationPicker({ coordinates, onLocationSelect, onClose }) {
               zoomControl={true}
             >
               <AdvancedMarker position={markerPosition}>
-                <div className="map-marker bg-[#D2691E]">
+                <div className="map-marker bg-[#EF8E1E]">
                   <span className="map-marker-inner text-white">
                     <MapPin className="w-4 h-4" />
                   </span>
@@ -109,7 +109,7 @@ function LocationPicker({ coordinates, onLocationSelect, onClose }) {
             </Button>
             <Button 
               onClick={handleConfirm}
-              className="bg-[#1E5631] hover:bg-[#144224]"
+              className="bg-[#357A37] hover:bg-[#2A6B2E]"
               data-testid="confirm-location-btn"
             >
               <Check className="w-4 h-4 mr-2" />
@@ -319,7 +319,7 @@ export default function ProjectForm() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-[#1E5631]">
+            <h1 className="text-2xl font-bold text-[#357A37]">
               {isEditMode ? "Edit Project" : "Add New Project"}
             </h1>
             <p className="text-gray-500 text-sm">
@@ -529,7 +529,7 @@ export default function ProjectForm() {
             <Button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-[#1E5631] hover:bg-[#144224]"
+              className="flex-1 bg-[#357A37] hover:bg-[#2A6B2E]"
               data-testid="save-btn"
             >
               {saving ? (

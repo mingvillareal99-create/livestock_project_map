@@ -122,7 +122,7 @@ function InfoCard({ project }) {
           </span>
           <button
             onClick={() => navigate(`/project/${project.id}`)}
-            className="text-xs text-[#1E5631] hover:underline flex items-center gap-1"
+            className="text-xs text-[#357A37] hover:underline flex items-center gap-1"
           >
             View <ExternalLink className="w-3 h-3" />
           </button>
@@ -149,7 +149,7 @@ function ProjectListView({ projects, projectsWithoutCoords, statusFilter, setSta
     <div className="p-4 md:p-8" data-testid="map-list-view">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#1E5631] mb-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#357A37] mb-1">
             Project Locations
           </h1>
           <p className="text-gray-500">
@@ -264,7 +264,7 @@ function ProjectListView({ projects, projectsWithoutCoords, statusFilter, setSta
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="p-2 bg-[#1E5631] text-white rounded-lg hover:bg-[#144224] transition-colors"
+                  className="p-2 bg-[#357A37] text-white rounded-lg hover:bg-[#2A6B2E] transition-colors"
                   data-testid={`open-in-gmaps-${project.id}`}
                 >
                   <ExternalLink className="w-4 h-4" />
@@ -296,7 +296,7 @@ function GoogleMapWrapper({ projects, selectedProject, onMarkerClick, onInfoWind
     <div className="relative h-full" data-testid="map-view">
       {/* Floating Controls */}
       <div className="absolute top-4 left-4 right-4 z-10 flex items-center gap-2 flex-wrap">
-        <h1 className="text-lg font-bold text-[#1E5631] bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+        <h1 className="text-lg font-bold text-[#357A37] bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
           Map View
         </h1>
         
@@ -457,7 +457,7 @@ export default function MapView() {
     return (
       <div className="map-container flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#1E5631] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-[#357A37] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-500">Loading projects...</p>
         </div>
       </div>
