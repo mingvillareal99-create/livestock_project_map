@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { 
   MapPin, 
   X, 
@@ -32,22 +33,8 @@ const STATUS_COLORS = {
   Completed: "#15803D"
 };
 
-// Dynamic import for Google Maps to handle errors gracefully
-let APIProvider, Map, AdvancedMarker, InfoWindow, useMap;
-
-try {
-  const mapsModule = require("@vis.gl/react-google-maps");
-  APIProvider = mapsModule.APIProvider;
-  Map = mapsModule.Map;
-  AdvancedMarker = mapsModule.AdvancedMarker;
-  InfoWindow = mapsModule.InfoWindow;
-  useMap = mapsModule.useMap;
-} catch (e) {
-  console.error("Failed to load Google Maps module:", e);
-}
-
 function MapContent({ projects, selectedProject, onMarkerClick, onInfoWindowClose }) {
-  const map = useMap ? useMap() : null;
+  const map = useMap();
 
   useEffect(() => {
     if (map && projects.length > 0 && window.google) {
@@ -62,8 +49,6 @@ function MapContent({ projects, selectedProject, onMarkerClick, onInfoWindowClos
       }
     }
   }, [map, projects]);
-
-  if (!AdvancedMarker || !InfoWindow) return null;
 
   return (
     <>
@@ -148,7 +133,7 @@ function InfoCard({ project }) {
 }
 
 // Fallback List View when Maps API is unavailable
-function ProjectListView({ projects, statusFilter, setStatusFilter }) {
+function ProjectListView({ projects, projectsWithoutCoords, statusFilter, setStatusFilter }) {
   const navigate = useNavigate();
   
   const getStatusBadge = (status) => {
@@ -206,16 +191,40 @@ function ProjectListView({ projects, statusFilter, setStatusFilter }) {
               <h3 className="font-semibold text-amber-800 mb-1">Google Maps API Configuration Required</h3>
               <p className="text-sm text-amber-700">
                 The Google Maps API key needs to be configured with HTTP referrer restrictions for this domain. 
-                Below is a list view of all projects with coordinates.
+                Below is a list view of all projects with coordinates. Click the link icon to open in Google Maps.
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
 
+      {/* Projects needing location */}
+      {projectsWithoutCoords.length > 0 && (
+        <Card className="mb-6 bg-orange-50 border-orange-200">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="w-5 h-5 text-orange-600" />
+                <span className="font-medium text-orange-800">
+                  {projectsWithoutCoords.length} project(s) need location
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-orange-300 text-orange-700 hover:bg-orange-100"
+                onClick={() => navigate('/gallery')}
+              >
+                View in Gallery
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Projects with coordinates */}
       <div className="space-y-3">
-        {projects.filter(p => p.coordinates?.lat).map((project) => (
+        {projects.map((project) => (
           <Card 
             key={project.id}
             className="project-card cursor-pointer"
@@ -246,12 +255,12 @@ function ProjectListView({ projects, statusFilter, setStatusFilter }) {
                     </span>
                     <span className="text-xs text-gray-400 flex items-center gap-1">
                       <Navigation className="w-3 h-3" />
-                      {project.coordinates.lat.toFixed(4)}, {project.coordinates.lng.toFixed(4)}
+                      {project.coordinates?.lat?.toFixed(4)}, {project.coordinates?.lng?.toFixed(4)}
                     </span>
                   </div>
                 </div>
                 <a
-                  href={`https://www.google.com/maps?q=${project.coordinates.lat},${project.coordinates.lng}`}
+                  href={`https://www.google.com/maps?q=${project.coordinates?.lat},${project.coordinates?.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
@@ -265,7 +274,7 @@ function ProjectListView({ projects, statusFilter, setStatusFilter }) {
           </Card>
         ))}
 
-        {projects.filter(p => p.coordinates?.lat).length === 0 && (
+        {projects.length === 0 && (
           <Card className="p-8 text-center">
             <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="font-semibold text-gray-700 mb-2">No Projects with Coordinates</h3>
@@ -279,58 +288,9 @@ function ProjectListView({ projects, statusFilter, setStatusFilter }) {
   );
 }
 
-export default function MapView() {
+// Google Map wrapper component
+function GoogleMapWrapper({ projects, selectedProject, onMarkerClick, onInfoWindowClose, projectsWithoutCoords, showNoCoordsList, setShowNoCoordsList, statusFilter, setStatusFilter }) {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [projectsWithoutCoords, setProjectsWithoutCoords] = useState([]);
-  const [showNoCoordsList, setShowNoCoordsList] = useState(false);
-  const [mapError, setMapError] = useState(false);
-
-  useEffect(() => {
-    fetchProjects();
-  }, [statusFilter]);
-
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      const params = {};
-      if (statusFilter !== "All") {
-        params.status = statusFilter;
-      }
-      const response = await axios.get(`${API}/projects`, { params });
-      const allProjects = response.data;
-      
-      setProjects(allProjects.filter(p => p.coordinates?.lat && p.coordinates?.lng));
-      setProjectsWithoutCoords(allProjects.filter(p => !p.coordinates?.lat || !p.coordinates?.lng));
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-      toast.error("Failed to load projects");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleMarkerClick = useCallback((project) => {
-    setSelectedProject(project);
-  }, []);
-
-  const handleInfoWindowClose = useCallback(() => {
-    setSelectedProject(null);
-  }, []);
-
-  // Check if Google Maps components are available
-  if (!GOOGLE_MAPS_API_KEY || !APIProvider || !Map || mapError) {
-    return (
-      <ProjectListView 
-        projects={projects.length > 0 ? projects : []} 
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-      />
-    );
-  }
 
   return (
     <div className="relative h-full" data-testid="map-view">
@@ -412,40 +372,25 @@ export default function MapView() {
       )}
 
       {/* Map */}
-      {loading ? (
-        <div className="map-container flex items-center justify-center bg-gray-100">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-[#1E5631] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-gray-500">Loading map...</p>
-          </div>
-        </div>
-      ) : (
-        <APIProvider 
-          apiKey={GOOGLE_MAPS_API_KEY}
-          onLoad={() => console.log("Maps API loaded")}
-        >
-          <Map
-            className="map-container"
-            defaultCenter={BICOL_CENTER}
-            defaultZoom={9}
-            mapId="da-project-map"
-            gestureHandling="greedy"
-            disableDefaultUI={false}
-            zoomControl={true}
-            mapTypeControl={false}
-            streetViewControl={false}
-            fullscreenControl={true}
-            onError={() => setMapError(true)}
-          >
-            <MapContent
-              projects={projects}
-              selectedProject={selectedProject}
-              onMarkerClick={handleMarkerClick}
-              onInfoWindowClose={handleInfoWindowClose}
-            />
-          </Map>
-        </APIProvider>
-      )}
+      <Map
+        className="map-container"
+        defaultCenter={BICOL_CENTER}
+        defaultZoom={9}
+        mapId="da-project-map"
+        gestureHandling="greedy"
+        disableDefaultUI={false}
+        zoomControl={true}
+        mapTypeControl={false}
+        streetViewControl={false}
+        fullscreenControl={true}
+      >
+        <MapContent
+          projects={projects}
+          selectedProject={selectedProject}
+          onMarkerClick={onMarkerClick}
+          onInfoWindowClose={onInfoWindowClose}
+        />
+      </Map>
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-10 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md">
@@ -463,5 +408,90 @@ export default function MapView() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MapView() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [projectsWithoutCoords, setProjectsWithoutCoords] = useState([]);
+  const [showNoCoordsList, setShowNoCoordsList] = useState(false);
+  const [mapError, setMapError] = useState(false);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [statusFilter]);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const params = {};
+      if (statusFilter !== "All") {
+        params.status = statusFilter;
+      }
+      const response = await axios.get(`${API}/projects`, { params });
+      const allProjects = response.data;
+      
+      setProjects(allProjects.filter(p => p.coordinates?.lat && p.coordinates?.lng));
+      setProjectsWithoutCoords(allProjects.filter(p => !p.coordinates?.lat || !p.coordinates?.lng));
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      toast.error("Failed to load projects");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMarkerClick = useCallback((project) => {
+    setSelectedProject(project);
+  }, []);
+
+  const handleInfoWindowClose = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
+
+  // Show loading
+  if (loading) {
+    return (
+      <div className="map-container flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#1E5631] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500">Loading projects...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if Google Maps API key is available
+  if (!GOOGLE_MAPS_API_KEY || mapError) {
+    return (
+      <ProjectListView 
+        projects={projects} 
+        projectsWithoutCoords={projectsWithoutCoords}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+      />
+    );
+  }
+
+  return (
+    <APIProvider 
+      apiKey={GOOGLE_MAPS_API_KEY}
+      onError={() => setMapError(true)}
+    >
+      <GoogleMapWrapper
+        projects={projects}
+        selectedProject={selectedProject}
+        onMarkerClick={handleMarkerClick}
+        onInfoWindowClose={handleInfoWindowClose}
+        projectsWithoutCoords={projectsWithoutCoords}
+        showNoCoordsList={showNoCoordsList}
+        setShowNoCoordsList={setShowNoCoordsList}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+      />
+    </APIProvider>
   );
 }
