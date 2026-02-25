@@ -418,7 +418,7 @@ export default function MapView() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [projectsWithoutCoords, setProjectsWithoutCoords] = useState([]);
   const [showNoCoordsList, setShowNoCoordsList] = useState(false);
-  const [mapError, setMapError] = useState(false);
+  const [mapError, setMapError] = useState(!GOOGLE_MAPS_API_KEY);
 
   useEffect(() => {
     fetchProjects();
