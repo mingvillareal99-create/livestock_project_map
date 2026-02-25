@@ -149,9 +149,14 @@ export default function ProjectForm() {
 
   const [formData, setFormData] = useState({
     project_name: "",
+    num_of_units: 1,
     beneficiary_name: "",
+    responsible_person: "",
+    contact_number: "",
+    facebook_link: "",
     address: "",
     status: "Proposed",
+    remarks: "",
     coordinates: { lat: null, lng: null },
     image_data: null
   });
@@ -168,10 +173,15 @@ export default function ProjectForm() {
       const response = await axios.get(`${API}/projects/${id}`);
       const project = response.data;
       setFormData({
-        project_name: project.project_name,
-        beneficiary_name: project.beneficiary_name,
-        address: project.address,
-        status: project.status,
+        project_name: project.project_name || "",
+        num_of_units: project.num_of_units || 1,
+        beneficiary_name: project.beneficiary_name || "",
+        responsible_person: project.responsible_person || "",
+        contact_number: project.contact_number || "",
+        facebook_link: project.facebook_link || "",
+        address: project.address || "",
+        status: project.status || "Proposed",
+        remarks: project.remarks || "",
         coordinates: project.coordinates || { lat: null, lng: null },
         image_data: null
       });
