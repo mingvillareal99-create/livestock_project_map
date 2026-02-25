@@ -41,9 +41,14 @@ class Coordinates(BaseModel):
 
 class ProjectBase(BaseModel):
     project_name: str
+    num_of_units: Optional[int] = 1
     beneficiary_name: str
+    responsible_person: Optional[str] = None
+    contact_number: Optional[str] = None
+    facebook_link: Optional[str] = None
     address: str
     status: str = "Proposed"  # Proposed, Ongoing, Completed
+    remarks: Optional[str] = None
     coordinates: Optional[Coordinates] = None
 
 class ProjectCreate(ProjectBase):
@@ -51,9 +56,14 @@ class ProjectCreate(ProjectBase):
 
 class ProjectUpdate(BaseModel):
     project_name: Optional[str] = None
+    num_of_units: Optional[int] = None
     beneficiary_name: Optional[str] = None
+    responsible_person: Optional[str] = None
+    contact_number: Optional[str] = None
+    facebook_link: Optional[str] = None
     address: Optional[str] = None
     status: Optional[str] = None
+    remarks: Optional[str] = None
     coordinates: Optional[Coordinates] = None
     image_data: Optional[str] = None
 
