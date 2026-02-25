@@ -29,8 +29,8 @@ const BICOL_CENTER = { lat: 13.4213, lng: 123.4139 };
 
 const STATUS_COLORS = {
   Proposed: "#64748B",
-  Ongoing: "#D97706",
-  Completed: "#15803D"
+  Ongoing: "#EF8E1E",
+  Completed: "#357A37"
 };
 
 function MapContent({ projects, selectedProject, onMarkerClick, onInfoWindowClose }) {
