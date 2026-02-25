@@ -6,40 +6,40 @@
 
 @layer base {
     :root {
-        --background: 138 20% 97%;
+        --background: 120 15% 97%;
         --foreground: 0 0% 10%;
         --card: 0 0% 100%;
         --card-foreground: 0 0% 10%;
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 10%;
-        --primary: 140 48% 23%;
+        --primary: 122 38% 34%;
         --primary-foreground: 0 0% 100%;
-        --secondary: 43 70% 65%;
-        --secondary-foreground: 0 0% 16%;
-        --muted: 138 20% 95%;
-        --muted-foreground: 150 10% 40%;
-        --accent: 25 76% 46%;
+        --secondary: 35 86% 52%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 120 15% 95%;
+        --muted-foreground: 120 10% 40%;
+        --accent: 35 86% 52%;
         --accent-foreground: 0 0% 100%;
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
-        --border: 140 20% 85%;
-        --input: 140 20% 85%;
-        --ring: 140 48% 23%;
-        --chart-1: 140 48% 23%;
-        --chart-2: 43 70% 65%;
-        --chart-3: 25 76% 46%;
-        --chart-4: 215 20% 45%;
-        --chart-5: 140 30% 50%;
+        --border: 120 20% 85%;
+        --input: 120 20% 85%;
+        --ring: 122 38% 34%;
+        --chart-1: 122 38% 34%;
+        --chart-2: 35 86% 52%;
+        --chart-3: 88 44% 48%;
+        --chart-4: 39 91% 61%;
+        --chart-5: 122 30% 50%;
         --radius: 0.75rem;
 
-        /* Custom DA colors */
-        --da-green: #1E5631;
-        --da-green-light: #2D7A47;
-        --da-gold: #E4C068;
-        --da-clay: #D2691E;
+        /* Custom DA Bicol colors */
+        --da-green: #357A37;
+        --da-green-light: #7CB342;
+        --da-orange: #EF8E1E;
+        --da-orange-light: #F7B53F;
         --status-proposed: #64748B;
-        --status-ongoing: #D97706;
-        --status-completed: #15803D;
+        --status-ongoing: #EF8E1E;
+        --status-completed: #357A37;
     }
 }
 
