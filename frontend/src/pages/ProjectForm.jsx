@@ -425,17 +425,59 @@ export default function ProjectForm() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="project_name">Project Name *</Label>
-                <Input
-                  id="project_name"
+                <Label htmlFor="project_name">Project Type *</Label>
+                <Select
                   value={formData.project_name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, project_name: e.target.value }))}
-                  placeholder="Enter project name"
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, project_name: value }))}
+                >
+                  <SelectTrigger className="mt-1.5" data-testid="project-type-select">
+                    <SelectValue placeholder="Select project type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PROJECT_TYPE_OPTIONS.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="num_of_units">No. of Units</Label>
+                <Input
+                  id="num_of_units"
+                  type="number"
+                  min="1"
+                  value={formData.num_of_units}
+                  onChange={(e) => setFormData(prev => ({ ...prev, num_of_units: parseInt(e.target.value) || 1 }))}
+                  placeholder="Enter number of units"
                   className="mt-1.5"
-                  data-testid="project-name-input"
+                  data-testid="num-units-input"
                 />
               </div>
 
+              <div>
+                <Label htmlFor="address">Full Address</Label>
+                <Textarea
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                  placeholder="Enter full address"
+                  className="mt-1.5"
+                  rows={2}
+                  data-testid="address-input"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Beneficiary Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Beneficiary Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="beneficiary_name">Beneficiary Name *</Label>
                 <Input
@@ -449,18 +491,51 @@ export default function ProjectForm() {
               </div>
 
               <div>
-                <Label htmlFor="address">Full Address</Label>
-                <Textarea
-                  id="address"
-                  value={formData.address}
-                  onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                  placeholder="Enter full address"
+                <Label htmlFor="responsible_person">Responsible Person</Label>
+                <Input
+                  id="responsible_person"
+                  value={formData.responsible_person}
+                  onChange={(e) => setFormData(prev => ({ ...prev, responsible_person: e.target.value }))}
+                  placeholder="Enter responsible person"
                   className="mt-1.5"
-                  rows={3}
-                  data-testid="address-input"
+                  data-testid="responsible-person-input"
                 />
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="contact_number">Contact Number</Label>
+                  <Input
+                    id="contact_number"
+                    value={formData.contact_number}
+                    onChange={(e) => setFormData(prev => ({ ...prev, contact_number: e.target.value }))}
+                    placeholder="e.g., 09123456789"
+                    className="mt-1.5"
+                    data-testid="contact-number-input"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="facebook_link">Facebook Link</Label>
+                  <Input
+                    id="facebook_link"
+                    value={formData.facebook_link}
+                    onChange={(e) => setFormData(prev => ({ ...prev, facebook_link: e.target.value }))}
+                    placeholder="e.g., facebook.com/username"
+                    className="mt-1.5"
+                    data-testid="facebook-link-input"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Status/Remarks */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Status / Remarks</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="status">Status</Label>
                 <Select
@@ -478,6 +553,19 @@ export default function ProjectForm() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="remarks">Remarks</Label>
+                <Textarea
+                  id="remarks"
+                  value={formData.remarks}
+                  onChange={(e) => setFormData(prev => ({ ...prev, remarks: e.target.value }))}
+                  placeholder="Enter any additional remarks or notes"
+                  className="mt-1.5"
+                  rows={3}
+                  data-testid="remarks-input"
+                />
               </div>
             </CardContent>
           </Card>
