@@ -53,7 +53,11 @@ const PROJECT_TYPE_OPTIONS = [
   "Beef Cattle Package 2 (Breeder) Upgraded with Housing",
   "Goat Package 1 (Meat/Dairy/Dual Type)",
   "Rabbit Package",
-  "Stingless Bees"
+  "Stingless Bees",
+  "INSPIRE 2022",
+  "INSPIRE 2023",
+  "INSPIRE 2024",
+  "Incubator"
 ];
 
 function LocationPicker({ coordinates, onLocationSelect, onClose }) {
