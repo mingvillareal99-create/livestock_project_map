@@ -262,7 +262,7 @@ export default function ProjectForm() {
     e.preventDefault();
 
     if (!formData.project_name.trim()) {
-      toast.error("Project name is required");
+      toast.error("Project type is required");
       return;
     }
     if (!formData.beneficiary_name.trim()) {
@@ -275,9 +275,14 @@ export default function ProjectForm() {
       
       const payload = {
         project_name: formData.project_name,
+        num_of_units: formData.num_of_units || 1,
         beneficiary_name: formData.beneficiary_name,
+        responsible_person: formData.responsible_person,
+        contact_number: formData.contact_number,
+        facebook_link: formData.facebook_link,
         address: formData.address,
         status: formData.status,
+        remarks: formData.remarks,
         coordinates: formData.coordinates.lat ? formData.coordinates : null,
         image_data: formData.image_data
       };
